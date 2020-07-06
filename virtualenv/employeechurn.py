@@ -94,8 +94,8 @@ from sklearn.metrics import  confusion_matrix, classification_report
 # print(classification_report(y_test, y_pred))
 
 from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
+#model = RandomForestClassifier()
+#model.fit(X_train, y_train)
 
 # y_pred = model.predict(X_test)
 # cm = confusion_matrix(y_pred, y_test)
@@ -103,3 +103,26 @@ model.fit(X_train, y_train)
 # plt.show()
 
 import tensorflow as tf
+
+model = tf.keras.models.Sequential()
+model.add(tf.keras.layers.Dense(units=500, activation='relu', input_shape=(51,)))
+model.add(tf.keras.layers.Dense(units=500, activation='relu'))
+model.add(tf.keras.layers.Dense(units=500, activation='relu'))
+model.add(tf.keras.layers.Dense(units=500, activation='relu'))
+model.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+
+print(model.summary())
+
+model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy'])
+epochs_hist = model.fit(X_train, y_train,epochs=100, batch_size=50)
+
+y_pred = model.predict(X_test)
+print(y_pred)
+y_pred = (y_pred>0.5)
+print(y_pred)
+#plt.plot(epochs_hist.history['loss'])
+#plt.plot(epochs_hist.history['accuracy'])
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True)
+
+plt.show()
